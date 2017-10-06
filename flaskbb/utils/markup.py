@@ -22,6 +22,10 @@ from pygments.util import ClassNotFound
 
 _re_emoji = re.compile(r':([a-z0-9\+\-_]+):', re.I)
 _re_user = re.compile(r'@(\w+)', re.I)
+_re_youtube = re.compile(
+    r'^((https?)://)?((www.)?youtube\.com/watch\?v=|youtu\.be/)' +
+    r'([A-Za-z0-9_-]{11})\s*$'
+)
 
 # base directory of flaskbb - used to collect the emojis
 _basedir = os.path.join(os.path.abspath(os.path.dirname(
@@ -101,6 +105,22 @@ class FlaskBBRenderer(mistune.Renderer):
                 mistune.escape(code)
         formatter = HtmlFormatter()
         return highlight(code, lexer, formatter)
+
+    def autolink(self, link, is_email=False):
+        if is_email:
+            match = None
+        else:
+            match = _re_youtube.match(link)
+        if match:
+            return (
+                '<span class="embed-responsive embed-responsive-16by9">' +
+                '<iframe src="https://www.youtube-nocookie.com/embed/' +
+                match.group(5) +
+                '?rel=0" allowfullscreen></iframe>' +
+                '</span>'
+            )
+        else:
+            return super().autolink(link, is_email)
 
 
 renderer = FlaskBBRenderer(escape=True, hard_wrap=True)
