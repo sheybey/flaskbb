@@ -36,3 +36,11 @@ print("Hello World")
     bad_language_render = markdown.render(bad_language)
     assert "<pre>" in bad_language_render
     assert "highlight" not in bad_language_render
+
+    # youtube url
+    youtube_url = "https://www.youtube.com/watch?v=b0jqPvpn3sY"
+    assert "<iframe" in markdown.render(youtube_url)
+
+    # color markdown
+    color = '~[blue](blue text)'
+    assert '<span style="color: blue">' in markdown.render(color)
