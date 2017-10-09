@@ -122,6 +122,26 @@ class FlaskBBRenderer(mistune.Renderer):
         else:
             return super().autolink(link, is_email)
 
+    def color_span(self, color, text):
+        return '<span style="color: {}">{}</span>'.format(
+            color,
+            mistune.escape(text)
+        )
+
+
+class FlaskBBInlineLexer(mistune.InlineLexer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rules.color_span = re.compile(
+            r'~\[(#[a-f0-9]{6}|[a-z]+)\]\((.*)\)',
+            re.I
+        )
+        self.default_rules.insert(0, 'color_span')
+
+    def output_color_span(self, match):
+        return self.renderer.color_span(match.group(1), match.group(2))
+
 
 renderer = FlaskBBRenderer(escape=True, hard_wrap=True)
-markdown = mistune.Markdown(renderer=renderer)
+inline = FlaskBBInlineLexer(renderer)
+markdown = mistune.Markdown(renderer=renderer, inline=inline)
