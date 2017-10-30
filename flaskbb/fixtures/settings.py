@@ -115,19 +115,25 @@ fixture = (
                 'name':         "Auth Timeout",
                 'description':  "The timeout for how long the user has to wait until he can access the resource again (in minutes).",
             }),
+            ('registration_recaptcha_enabled', {
+                'value':        False,
+                'value_type':   "boolean",
+                'name':         "Enable registration reCAPTCHA",
+                'description':  ("Helps to prevent bots from creating accounts. "
+                                 "For more information visit this link: <a href=http://www.google.com/recaptcha>http://www.google.com/recaptcha</a>"),
+            }),
+            ('login_recaptcha_enabled', {
+                'value':        False,
+                'value_type':   "boolean",
+                'name':         "Enable login reCAPTCHA",
+                'description':  "Helps prevent brute-force login attacks."
+            }),
             ('login_recaptcha', {
                 'value':        5,
                 'value_type':   "integer",
                 'extra':        {'min': 0},
-                'name':         "Login reCAPTCHA",
+                'name':         "Login reCAPTCHA threshold",
                 'description':  "Use a CAPTCHA after a specified amount of failed login attempts."
-            }),
-            ('recaptcha_enabled', {
-                'value':        False,
-                'value_type':   "boolean",
-                'name':         "Enable reCAPTCHA",
-                'description':  ("Helps to prevent bots from creating accounts. "
-                                 "For more information visit this link: <a href=http://www.google.com/recaptcha>http://www.google.com/recaptcha</a>"),
             }),
             ('recaptcha_public_key', {
                 'value':        "",
