@@ -52,7 +52,10 @@ class RecaptchaValidator(object):
         self.message = message
 
     def __call__(self, form, field):
-        if current_app.testing or not flaskbb_config["RECAPTCHA_ENABLED"]:
+        if current_app.testing or not (
+            flaskbb_config["LOGIN_RECAPTCHA_ENABLED"] or
+            flaskbb_config["REGISTRATION_RECAPTCHA_ENABLED"]
+        ):
             return True
 
         if request.json:
@@ -117,7 +120,10 @@ class RecaptchaWidget(object):
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
 
-        if not flaskbb_config["RECAPTCHA_ENABLED"]:
+        if not (
+            flaskbb_config["LOGIN_RECAPTCHA_ENABLED"] or
+            flaskbb_config["REGISTRATION_RECAPTCHA_ENABLED"]
+        ):
             return
 
         try:
